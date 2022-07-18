@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	var v core.Vector = core.Vector{10, 10}
+	var v core.test()
 	fmt.Println(v.X)
 }
