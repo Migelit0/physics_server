@@ -62,10 +62,17 @@ func (w World) handleBody(index *int) {
 
 func (w World) doOneIter() {
 	for i, _ := range w.bodies {
+		// считаем силу, ускорение, скорость для каждого тела
 		w.handleBody(&i)
 	}
 
 	for i, _ := range w.bodies {
+		// обновляем для всех тел координаты
 		w.bodies[i].updateCoords()
+	}
+
+	for i, _ := range w.bodies {
+		// проверяем валидны ли координаты и обрабатываем отскоки
+		w.bodies[i].correctCoords()
 	}
 }
