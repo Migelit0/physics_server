@@ -3,22 +3,22 @@ package core
 import "math"
 
 type World struct {
-	width, height int16
-	bodies        []Body
+	Width, Height int16
+	Bodies        []Body
 	G             *float64
 }
 
 func (w World) appendBody(body *Body) {
-	w.bodies = append(w.bodies, *body)
+	w.Bodies = append(w.Bodies, *body)
 }
 
 // Calculate force for body with index
 func (w World) calcForceForBody(index *int) Vector {
 	var resultantForce Vector = Vector{0, 0}
 	var force Vector
-	var bodyMain Body = w.bodies[*index]
+	var bodyMain Body = w.Bodies[*index]
 
-	for i, body := range w.bodies {
+	for i, body := range w.Bodies {
 		if i == *index {
 			continue
 		}
@@ -56,23 +56,23 @@ func (w World) calcAbcForceTwoBodies(b0, b1 *Body, R float64) float64 {
 func (w World) handleBody(index *int) {
 	var force Vector
 	force = w.calcForceForBody(index)
-	w.bodies[*index].updateSpeedup(&force)
-	w.bodies[*index].updateSpeed()
+	w.Bodies[*index].updateSpeedup(&force)
+	w.Bodies[*index].updateSpeed()
 }
 
 func (w World) doOneIter() {
-	for i, _ := range w.bodies {
+	for i, _ := range w.Bodies {
 		// считаем силу, ускорение, скорость для каждого тела
 		w.handleBody(&i)
 	}
 
-	for i, _ := range w.bodies {
+	for i, _ := range w.Bodies {
 		// обновляем для всех тел координаты
-		w.bodies[i].updateCoords()
+		w.Bodies[i].updateCoords()
 	}
 
-	for i, _ := range w.bodies {
+	for i, _ := range w.Bodies {
 		// проверяем валидны ли координаты и обрабатываем отскоки
-		w.bodies[i].correctCoords()
+		w.Bodies[i].correctCoords()
 	}
 }
