@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/migelit0/physics_server/WebSocket/server/config"
+	"github.com/migelit0/physics_server/WebSocket/server/structures"
 	core "github.com/migelit0/physics_server/core/structures"
 	"log"
 	"net"
@@ -12,6 +13,7 @@ import (
 )
 
 var port int
+var server structures.Server
 
 func initWorld() core.World {
 	var emptyBodies []core.Body
@@ -34,6 +36,7 @@ func init() {
 		port = portEnv
 	}
 
+	server = structures.StartServer(handler)
 }
 
 func main() {
