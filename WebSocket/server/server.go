@@ -3,18 +3,15 @@ package main
 import (
 	"fmt"
 	"github.com/joho/godotenv"
+	"github.com/migelit0/physics_server/WebSocket/server/config"
 	core "github.com/migelit0/physics_server/core/structures"
-	"github.com/migelit0/physics_server/ftp/config"
-	"github.com/migelit0/physics_server/ftp/ftp"
 	"log"
 	"net"
 	"os"
-	"path/filepath"
 	"strconv"
 )
 
 var port int
-var rootDir string
 
 func initWorld() core.World {
 	var emptyBodies []core.Body
@@ -37,10 +34,6 @@ func init() {
 		port = portEnv
 	}
 
-	rootDirEnv, isExist := os.LookupEnv("ROOT_DIR")
-	if isExist {
-		rootDir = rootDirEnv
-	}
 }
 
 func main() {
@@ -62,9 +55,6 @@ func main() {
 
 func handleConn(c net.Conn) {
 	defer c.Close()
-	absPath, err := filepath.Abs(rootDir)
-	if err != nil {
-		log.Fatal(err)
-	}
-	ftp.Serve(ftp.NewConn(c, absPath))
+
+	// serve conn somehow
 }
