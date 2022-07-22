@@ -17,13 +17,24 @@ type Server struct {
 	clients       map[*websocket.Conn]bool
 	worlds        map[*websocket.Conn]core.World
 	handleMessage func(message []byte) // хандлер новых сообщений,
+	width, height uint16
+	g float64
 }
 
 func (server *Server) echo(w http.ResponseWriter, r *http.Request) {
+	var newWorld core.World = core.World{
+		Width:  server.width,
+		Height: server.height,
+		Bodies: []core.Body,
+		G:      &server.g,
+	}
+
 	connection, _ := upgrader.Upgrade(w, r, nil)
 	defer connection.Close()
 
-	server.clients[connection] = true        // Сохраняем соединение, используя его как ключ
+	server.clients[connection] = true // Сохраняем соединение, используя его как ключ
+	server.worlds[connection] = newWorld
+
 	defer delete(server.clients, connection) // Удаляем соединение
 
 	for {

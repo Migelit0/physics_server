@@ -36,7 +36,7 @@ func init() {
 		port = portEnv
 	}
 
-	server = structures.StartServer(handler)
+	server = structures.StartServer(handler, port)
 }
 
 func main() {

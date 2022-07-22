@@ -3,7 +3,7 @@ package core
 import "math"
 
 type World struct {
-	Width, Height int16
+	Width, Height uint16
 	Bodies        []Body
 	G             *float64
 }
@@ -14,9 +14,9 @@ func (w World) appendBody(body *Body) {
 
 // Calculate force for body with index
 func (w World) calcForceForBody(index *int) Vector {
-	var resultantForce Vector = Vector{0, 0}
+	var resultantForce = Vector{0, 0}
 	var force Vector
-	var bodyMain Body = w.Bodies[*index]
+	var bodyMain = w.Bodies[*index]
 
 	for i, body := range w.Bodies {
 		if i == *index {
@@ -61,17 +61,17 @@ func (w World) handleBody(index *int) {
 }
 
 func (w World) doOneIter() {
-	for i, _ := range w.Bodies {
+	for i := range w.Bodies {
 		// считаем силу, ускорение, скорость для каждого тела
 		w.handleBody(&i)
 	}
 
-	for i, _ := range w.Bodies {
+	for i := range w.Bodies {
 		// обновляем для всех тел координаты
 		w.Bodies[i].updateCoords()
 	}
 
-	for i, _ := range w.Bodies {
+	for i := range w.Bodies {
 		// проверяем валидны ли координаты и обрабатываем отскоки
 		w.Bodies[i].correctCoords()
 	}
