@@ -8,12 +8,12 @@ type World struct {
 	G             *float64
 }
 
-func (w World) appendBody(body *Body) {
+func (w *World) appendBody(body *Body) {
 	w.Bodies = append(w.Bodies, *body)
 }
 
 // Calculate force for body with index
-func (w World) calcForceForBody(index *int) Vector {
+func (w *World) calcForceForBody(index *int) Vector {
 	var resultantForce = Vector{0, 0}
 	var force Vector
 	var bodyMain = w.Bodies[*index]
@@ -28,7 +28,7 @@ func (w World) calcForceForBody(index *int) Vector {
 	return resultantForce
 }
 
-func (w World) calcForceTwoBodies(b0, b1 *Body) Vector {
+func (w *World) calcForceTwoBodies(b0, b1 *Body) Vector {
 	var x1, y1, x, y, dx, dy int
 	var dist, abcForce, sin, cos float64
 	var force Vector
@@ -49,18 +49,18 @@ func (w World) calcForceTwoBodies(b0, b1 *Body) Vector {
 	return force
 }
 
-func (w World) calcAbcForceTwoBodies(b0, b1 *Body, R float64) float64 {
+func (w *World) calcAbcForceTwoBodies(b0, b1 *Body, R float64) float64 {
 	return *w.G * b0.Mass * b1.Mass / (R * R)
 }
 
-func (w World) handleBody(index *int) {
+func (w *World) handleBody(index *int) {
 	var force Vector
 	force = w.calcForceForBody(index)
 	w.Bodies[*index].updateSpeedup(&force)
 	w.Bodies[*index].updateSpeed()
 }
 
-func (w World) doOneIter() {
+func (w *World) DoOneIter() {
 	for i := range w.Bodies {
 		// считаем силу, ускорение, скорость для каждого тела
 		w.handleBody(&i)

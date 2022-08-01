@@ -16,7 +16,7 @@ func (b Body) Coords() (int, int) {
 	return b.X, b.Y
 }
 
-func (b Body) updateCoords() {
+func (b *Body) updateCoords() {
 	var speedX float64 = b.Speed.X
 	var speedY float64 = b.Speed.Y
 
@@ -24,23 +24,23 @@ func (b Body) updateCoords() {
 	b.Y += int(math.Round(speedY * *b.Factor))
 }
 
-func (b Body) updateSpeedup(force *Vector) {
+func (b *Body) updateSpeedup(force *Vector) {
 	var newSpeedup Vector = force.div(b.Mass)
 	b.SpeedUp = newSpeedup
 }
 
-func (b Body) updateSpeed() {
+func (b *Body) updateSpeed() {
 	var dSpeed Vector = b.SpeedUp.mul(*b.Factor)
 	b.Speed = b.Speed.add(&dSpeed)
 }
 
-func (b Body) updateAll(force *Vector) {
+func (b *Body) updateAll(force *Vector) {
 	b.updateSpeedup(force)
 	b.updateSpeed()
 	b.updateCoords()
 }
 
-func (b Body) correctCoords() {
+func (b *Body) correctCoords() {
 	if b.X <= 0 || b.X >= *b.MaxX {
 		b.Speed.setX(-1 * b.Speed.X)
 		if b.X <= 0 {

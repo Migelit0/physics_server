@@ -19,10 +19,10 @@ func (v Vector) div(k float64) Vector {
 	return Vector{v.X / k, v.Y / k}
 }
 
-func (v Vector) setX(newX float64) {
+func (v *Vector) setX(newX float64) {
 	v.X = newX
 }
 
-func (v Vector) setY(newY float64) {
+func (v *Vector) setY(newY float64) {
 	v.Y = newY
 }

@@ -48,9 +48,15 @@ func (server *Server) echo(w http.ResponseWriter, r *http.Request) {
 		}
 
 		go server.handleMessage(message)
-		if mt == websocket.BinaryMessage {
+		if mt == websocket.PingMessage {
 			// нас просто пингуют - отдаем состояние мира
 
+			server.worlds[connection].doOneIter()
+
+			err := connection.WriteMessage(websocket.TextMessage)
+			if err != nil {
+				return
+			}
 		}
 	}
 }
