@@ -18,24 +18,27 @@ type Server struct {
 	worlds        map[*websocket.Conn]core.World
 	handleMessage func(message []byte) // хандлер новых сообщений,
 	width, height uint16
-	g float64
+	g             float64
 }
 
 func (server *Server) echo(w http.ResponseWriter, r *http.Request) {
+	var bodies []core.Body
+
 	var newWorld core.World = core.World{
 		Width:  server.width,
 		Height: server.height,
-		Bodies: []core.Body,
+		Bodies: bodies,
 		G:      &server.g,
 	}
 
 	connection, _ := upgrader.Upgrade(w, r, nil)
 	defer connection.Close()
 
-	server.clients[connection] = true // Сохраняем соединение, используя его как ключ
-	server.worlds[connection] = newWorld
+	server.clients[connection] = true    // Сохраняем соединение, используя его как ключ
+	server.worlds[connection] = newWorld // Создаем мир для нового состояния
 
 	defer delete(server.clients, connection) // Удаляем соединение
+	defer delete(server.worlds, connection)  // Удаляем мир
 
 	for {
 		mt, message, err := connection.ReadMessage()
@@ -45,6 +48,10 @@ func (server *Server) echo(w http.ResponseWriter, r *http.Request) {
 		}
 
 		go server.handleMessage(message)
+		if mt == websocket.BinaryMessage {
+			// нас просто пингуют - отдаем состояние мира
+
+		}
 	}
 }
 
@@ -57,11 +64,12 @@ func (server *Server) WriteMessage(message []byte) {
 	}
 }
 
-func StartServer(handleMessage func(message []byte), port int) *Server {
+func StartServer(handleMessage func(message []byte), port int, width, height uint16, g float64) *Server {
 	server := Server{
 		make(map[*websocket.Conn]bool),
 		make(map[*websocket.Conn]core.World),
 		handleMessage,
+		width, height, g,
 	}
 
 	http.HandleFunc("/", server.echo)

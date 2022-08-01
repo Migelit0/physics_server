@@ -3,7 +3,7 @@ package core
 import "math"
 
 type Body struct {
-	id         uint16
+	Id         uint16
 	X, Y       int
 	Mass       float64
 	SpeedUp    Vector
