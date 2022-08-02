@@ -23,7 +23,7 @@ func (w *World) CalcForceForBody(index *int) Vector {
 		if i == *index {
 			continue
 		}
-		force = w.calcForceTwoBodies(&bodyMain, &body)
+		force = w.CalcForceTwoBodies(&bodyMain, &body)
 		resultantForce = resultantForce.add(&force)
 	}
 	return resultantForce
