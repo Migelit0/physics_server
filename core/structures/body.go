@@ -41,23 +41,23 @@ func (b *Body) updateAll(force *Vector) {
 }
 
 func (b *Body) correctCoords() {
-	if b.X <= 0 || b.X >= *b.MaxX {
+	if b.X <= 0 || b.X >= int(*b.MaxX) {
 		b.Speed.setX(-1 * b.Speed.X)
 		if b.X <= 0 {
 			b.X = 1
 		}
-		if b.X >= *b.MaxX {
-			b.Y = *b.MaxX - 1
+		if b.X >= int(*b.MaxX) {
+			b.Y = int(*b.MaxX) - 1
 		}
 	}
 
-	if b.Y <= 0 || b.Y >= *b.MaxY {
+	if b.Y <= 0 || b.Y >= int(*b.MaxY) {
 		b.Speed.setY(-1 * b.Speed.Y)
 		if b.Y <= 0 {
 			b.Y = 1
 		}
-		if b.Y >= *b.MaxY {
-			b.Y = *b.MaxY - 1
+		if b.Y >= int(*b.MaxY) {
+			b.Y = int(*b.MaxY) - 1
 		}
 	}
 }

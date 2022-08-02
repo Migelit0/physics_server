@@ -1,5 +1,7 @@
 package structures
 
-func handleMessage(message []byte) {
+import "fmt"
 
+func HandleMessage(message []byte) {
+	fmt.Println(string(message))
 }

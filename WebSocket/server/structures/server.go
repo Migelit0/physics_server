@@ -19,12 +19,13 @@ type Server struct {
 	handleMessage func(message []byte) // хандлер новых сообщений,
 	width, height uint16
 	g             float64
+	Port          string
 }
 
 func (server *Server) handle(w http.ResponseWriter, r *http.Request) {
 	var bodies []core.Body
 
-	var newWorld core.World = core.World{
+	var newWorld = core.World{
 		Width:  server.width,
 		Height: server.height,
 		Bodies: bodies,
@@ -67,16 +68,17 @@ func (server *Server) handle(w http.ResponseWriter, r *http.Request) {
 }
 
 func StartServer(handleMessage func(message []byte), port int, width, height uint16, g float64) *Server {
+	portStr := fmt.Sprintf(":%d", port)
+
 	server := Server{
 		make(map[*websocket.Conn]bool),
 		make(map[*websocket.Conn]core.World),
 		handleMessage,
-		width, height, g,
+		width, height, g, portStr,
 	}
 
 	http.HandleFunc("/v1", server.handle)
 
-	portStr := fmt.Sprintf(":%d", port)
 	go http.ListenAndServe(portStr, nil) // Уводим http сервер в горутину
 
 	return &server

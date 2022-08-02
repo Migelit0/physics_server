@@ -1,13 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/migelit0/physics_server/WebSocket/server/config"
 	"github.com/migelit0/physics_server/WebSocket/server/structures"
-	core "github.com/migelit0/physics_server/core/structures"
 	"log"
-	"net"
 	"os"
 	"strconv"
 )
@@ -15,12 +12,7 @@ import (
 var port int
 var server structures.Server
 
-func initWorld() core.World {
-	var emptyBodies []core.Body
-	w := core.World{Width: config.WIDTH, Height: config.HEIGHT, Bodies: emptyBodies, G: &config.G}
-	return w
-}
-
+// читаем из .енв все значения
 func init() {
 	err := godotenv.Load()
 	if err != nil {
@@ -36,28 +28,10 @@ func init() {
 		port = portEnv
 	}
 
-	server = structures.StartServer(, port)
+	server = *structures.StartServer(structures.HandleMessage, port, config.WIDTH, config.HEIGHT, config.G)
 }
 
 func main() {
-	server := fmt.Sprintf(":%d", port)
-	listener, err := net.Listen("tcp", server)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			log.Println(err)
-			continue
-		}
-		go handleConn(conn)
-	}
-}
-
-func handleConn(c net.Conn) {
-	defer c.Close()
-
-	// serve conn somehow
+	server := structures.StartServer(structures.HandleMessage, port, config.WIDTH, config.HEIGHT, config.G)
+	log.Println("Started server on", server.Port)
 }

@@ -44,13 +44,13 @@ func (w *World) CalcForceTwoBodies(b0, b1 *Body) Vector {
 	sin = float64(dy) / dist
 	cos = float64(dx) / dist
 
-	abcForce = w.calcAbcForceTwoBodies(b0, b1, dist)
+	abcForce = w.CalcAbcForceTwoBodies(b0, b1, dist)
 	force = Vector{abcForce * cos, abcForce * sin}
 
 	return force
 }
 
-func (w *World) calcAbcForceTwoBodies(b0, b1 *Body, R float64) float64 {
+func (w *World) CalcAbcForceTwoBodies(b0, b1 *Body, R float64) float64 {
 	return *w.G * b0.Mass * b1.Mass / (R * R)
 }
 
