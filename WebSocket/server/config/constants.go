@@ -1,6 +1,8 @@
 package config
 
-var FACTOR float64 = 100 // тиков в секунду
-var WIDTH int16 = 700
-var HEIGHT int16 = 700
-var G float64 = 6.67 * 1e-11
+const (
+	FACTOR float64 = 100 // тиков в секунду
+	WIDTH  uint16  = 700
+	HEIGHT uint16  = 700
+	G      float64 = 6.67 * 1e-11
+)

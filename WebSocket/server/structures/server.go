@@ -21,7 +21,7 @@ type Server struct {
 	g             float64
 }
 
-func (server *Server) echo(w http.ResponseWriter, r *http.Request) {
+func (server *Server) handle(w http.ResponseWriter, r *http.Request) {
 	var bodies []core.Body
 
 	var newWorld core.World = core.World{
@@ -51,21 +51,17 @@ func (server *Server) echo(w http.ResponseWriter, r *http.Request) {
 		if mt == websocket.PingMessage {
 			// нас просто пингуют - отдаем состояние мира
 
-			server.worlds[connection].doOneIter()
+			// FIXME: адекватно сделать без лишней переменной
+			world := server.worlds[connection]
+			world.DoOneIter()
+			server.worlds[connection] = world
 
-			err := connection.WriteMessage(websocket.TextMessage)
+			msg := generateResponseText(&world)
+
+			err := connection.WriteMessage(websocket.TextMessage, msg)
 			if err != nil {
 				return
 			}
-		}
-	}
-}
-
-func (server *Server) WriteMessage(message []byte) {
-	for conn := range server.clients {
-		err := conn.WriteMessage(websocket.TextMessage, message)
-		if err != nil {
-			return
 		}
 	}
 }
@@ -78,7 +74,7 @@ func StartServer(handleMessage func(message []byte), port int, width, height uin
 		width, height, g,
 	}
 
-	http.HandleFunc("/", server.echo)
+	http.HandleFunc("/v1", server.handle)
 
 	portStr := fmt.Sprintf(":%d", port)
 	go http.ListenAndServe(portStr, nil) // Уводим http сервер в горутину

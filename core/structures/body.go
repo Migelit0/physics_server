@@ -9,7 +9,7 @@ type Body struct {
 	SpeedUp    Vector
 	Speed      Vector
 	Factor     *float64
-	MaxX, MaxY *int
+	MaxX, MaxY *uint16
 }
 
 func (b Body) Coords() (int, int) {
