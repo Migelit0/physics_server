@@ -25,12 +25,12 @@ func (b *Body) updateCoords() {
 }
 
 func (b *Body) updateSpeedup(force *Vector) {
-	var newSpeedup = force.Div(b.Mass)
+	var newSpeedup = force.Div(&b.Mass)
 	b.SpeedUp = newSpeedup
 }
 
 func (b *Body) updateSpeed() {
-	var dSpeed = b.SpeedUp.Mul(*b.Factor)
+	var dSpeed = b.SpeedUp.Mul(b.Factor)
 	b.Speed = b.Speed.Add(&dSpeed)
 }
 

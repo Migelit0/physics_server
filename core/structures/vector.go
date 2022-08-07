@@ -10,13 +10,13 @@ func (v Vector) Add(v2 *Vector) Vector {
 }
 
 // Mul Multiply vector and coefficient
-func (v Vector) Mul(k float64) Vector {
-	return Vector{v.X * k, v.Y * k}
+func (v Vector) Mul(k *float64) Vector {
+	return Vector{v.X * *k, v.Y * *k}
 }
 
 // Div Divide vector and number
-func (v Vector) Div(k float64) Vector {
-	return Vector{v.X / k, v.Y / k}
+func (v Vector) Div(k *float64) Vector {
+	return Vector{v.X / *k, v.Y / *k}
 }
 
 func (v *Vector) SetX(newX float64) {

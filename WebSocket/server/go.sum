@@ -30,3 +30,5 @@ github.com/migelit0/physics_server/core v0.1.14 h1:PeKRDpJNtoKi8tMxK5r10NeYBtLMU
 github.com/migelit0/physics_server/core v0.1.14/go.mod h1:PSgiovyiDAOrFU0i9+dGJc8WwGvsISus8uv+qMehp4w=
 github.com/migelit0/physics_server/core v0.1.15 h1:VNvWk9WSU24WYtFLPmAm/8pBAmpO3iwOmMHhi2d9keU=
 github.com/migelit0/physics_server/core v0.1.15/go.mod h1:PSgiovyiDAOrFU0i9+dGJc8WwGvsISus8uv+qMehp4w=
+github.com/migelit0/physics_server/core v0.1.16 h1:wgwh07rEzE2uBoxSKq2AOW4oPVXdy1ULn4uBfUtR21I=
+github.com/migelit0/physics_server/core v0.1.16/go.mod h1:PSgiovyiDAOrFU0i9+dGJc8WwGvsISus8uv+qMehp4w=
