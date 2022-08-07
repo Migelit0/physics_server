@@ -17,20 +17,20 @@ func (b Body) Coords() (int, int) {
 }
 
 func (b *Body) updateCoords() {
-	var speedX float64 = b.Speed.X
-	var speedY float64 = b.Speed.Y
+	var speedX = b.Speed.X
+	var speedY = b.Speed.Y
 
 	b.X += int(math.Round(speedX * *b.Factor))
 	b.Y += int(math.Round(speedY * *b.Factor))
 }
 
 func (b *Body) updateSpeedup(force *Vector) {
-	var newSpeedup Vector = force.Div(b.Mass)
+	var newSpeedup = force.Div(b.Mass)
 	b.SpeedUp = newSpeedup
 }
 
 func (b *Body) updateSpeed() {
-	var dSpeed Vector = b.SpeedUp.Mul(*b.Factor)
+	var dSpeed = b.SpeedUp.Mul(*b.Factor)
 	b.Speed = b.Speed.Add(&dSpeed)
 }
 

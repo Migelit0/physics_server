@@ -24,7 +24,7 @@ func (w *World) CalcForceForBody(index *int) Vector {
 			continue
 		}
 		force = w.CalcForceTwoBodies(&bodyMain, &body)
-		resultantForce = resultantForce.add(&force)
+		resultantForce = resultantForce.Add(&force)
 	}
 	return resultantForce
 }
