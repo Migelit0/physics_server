@@ -25,13 +25,13 @@ func (b *Body) updateCoords() {
 }
 
 func (b *Body) updateSpeedup(force *Vector) {
-	var newSpeedup Vector = force.div(b.Mass)
+	var newSpeedup Vector = force.Div(b.Mass)
 	b.SpeedUp = newSpeedup
 }
 
 func (b *Body) updateSpeed() {
-	var dSpeed Vector = b.SpeedUp.mul(*b.Factor)
-	b.Speed = b.Speed.add(&dSpeed)
+	var dSpeed Vector = b.SpeedUp.Mul(*b.Factor)
+	b.Speed = b.Speed.Add(&dSpeed)
 }
 
 func (b *Body) updateAll(force *Vector) {
@@ -42,7 +42,7 @@ func (b *Body) updateAll(force *Vector) {
 
 func (b *Body) correctCoords() {
 	if b.X <= 0 || b.X >= int(*b.MaxX) {
-		b.Speed.setX(-1 * b.Speed.X)
+		b.Speed.SetX(-1 * b.Speed.X)
 		if b.X <= 0 {
 			b.X = 1
 		}
@@ -52,7 +52,7 @@ func (b *Body) correctCoords() {
 	}
 
 	if b.Y <= 0 || b.Y >= int(*b.MaxY) {
-		b.Speed.setY(-1 * b.Speed.Y)
+		b.Speed.SetY(-1 * b.Speed.Y)
 		if b.Y <= 0 {
 			b.Y = 1
 		}

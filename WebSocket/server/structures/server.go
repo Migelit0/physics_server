@@ -3,7 +3,9 @@ package structures
 import (
 	"fmt"
 	"github.com/gorilla/websocket"
+	"github.com/migelit0/physics_server/WebSocket/server/util"
 	core "github.com/migelit0/physics_server/core/structures"
+	"log"
 	"net/http"
 )
 
@@ -23,14 +25,7 @@ type Server struct {
 }
 
 func (server *Server) handle(w http.ResponseWriter, r *http.Request) {
-	var bodies []core.Body
-
-	var newWorld = core.World{
-		Width:  server.width,
-		Height: server.height,
-		Bodies: bodies,
-		G:      &server.g,
-	}
+	var newWorld = util.GenerateInitWorld(3)
 
 	connection, _ := upgrader.Upgrade(w, r, nil)
 	defer connection.Close()
@@ -41,24 +36,27 @@ func (server *Server) handle(w http.ResponseWriter, r *http.Request) {
 	defer delete(server.clients, connection) // Удаляем соединение
 	defer delete(server.worlds, connection)  // Удаляем мир
 
+	log.Println("New conn")
 	for {
-		mt, message, err := connection.ReadMessage()
+		mt, _, err := connection.ReadMessage()
 
 		if err != nil || mt == websocket.CloseMessage {
 			break // Выходим из цикла, если клиент пытается закрыть соединение или связь прервана
 		}
 
-		go server.handleMessage(message)
-		if mt == websocket.PingMessage {
+		// go server.handleMessage(message)
+		if mt == websocket.TextMessage && true {
 			// нас просто пингуют - отдаем состояние мира
 
 			// FIXME: адекватно сделать без лишней переменной
 			world := server.worlds[connection]
 			world.DoOneIter()
 			server.worlds[connection] = world
+			log.Println("World len(body): ", len(world.Bodies))
 
 			msg := generateResponseText(&world)
 
+			log.Println("sending: ", string(msg))
 			err := connection.WriteMessage(websocket.TextMessage, msg)
 			if err != nil {
 				return
@@ -78,8 +76,37 @@ func StartServer(handleMessage func(message []byte), port int, width, height uin
 	}
 
 	http.HandleFunc("/v1", server.handle)
+	http.HandleFunc("/test", server.echo)
 
 	go http.ListenAndServe(portStr, nil) // Уводим http сервер в горутину
 
 	return &server
+}
+
+func (server *Server) echo(w http.ResponseWriter, r *http.Request) {
+	log.Println("In echo")
+	connection, err := upgrader.Upgrade(w, r, nil)
+
+	if err != nil {
+		log.Println("Upgrade: ", err)
+		return
+	}
+
+	for {
+		mt, message, err := connection.ReadMessage()
+
+		if err != nil || mt == websocket.CloseMessage {
+			log.Println("read", err)
+			break // Выходим из цикла, если клиент пытается закрыть соединение или связь прервана
+		}
+
+		// go server.handleMessage(message)
+
+		log.Println("send: ", string(message))
+		err = connection.WriteMessage(websocket.TextMessage, message)
+		if err != nil {
+			return
+		}
+
+	}
 }

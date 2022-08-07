@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func generateInitWorld(amount int) core.World {
+func GenerateInitWorld(amount int) core.World {
 	var bodies []core.Body
 
 	g := config.G

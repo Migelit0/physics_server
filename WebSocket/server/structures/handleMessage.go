@@ -1,7 +1,9 @@
 package structures
 
-import "fmt"
+import (
+	"log"
+)
 
 func HandleMessage(message []byte) {
-	fmt.Println(string(message))
+	log.Println("get", string(message))
 }

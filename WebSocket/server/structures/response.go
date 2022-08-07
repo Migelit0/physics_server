@@ -23,14 +23,13 @@ func generateResponse(w *core.World) Response {
 
 func generateResponseText(w *core.World) []byte {
 	var res = generateResponse(w)
+	log.Println(res.Data)
 
 	jsonData, err := json.Marshal(res.Data)
 	if err != nil {
 		log.Panicln(err)
-		return []byte
+		return []byte{}
 	}
 
-	jsonStr := string(jsonData)
-
-	return []byte(jsonStr)
+	return jsonData
 }

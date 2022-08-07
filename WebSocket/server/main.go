@@ -27,11 +27,12 @@ func init() {
 		}
 		port = portEnv
 	}
-
-	server = *structures.StartServer(structures.HandleMessage, port, config.WIDTH, config.HEIGHT, config.G)
 }
 
 func main() {
 	server := structures.StartServer(structures.HandleMessage, port, config.WIDTH, config.HEIGHT, config.G)
 	log.Println("Started server on", server.Port)
+	for {
+		continue
+	}
 }

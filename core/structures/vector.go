@@ -5,24 +5,24 @@ type Vector struct {
 }
 
 // Add two vectors
-func (v Vector) add(v2 *Vector) Vector {
+func (v Vector) Add(v2 *Vector) Vector {
 	return Vector{v.X + v2.X, v.Y + v2.Y}
 }
 
-// Multiply vector and coefficient
-func (v Vector) mul(k float64) Vector {
+// Mul Multiply vector and coefficient
+func (v Vector) Mul(k float64) Vector {
 	return Vector{v.X * k, v.Y * k}
 }
 
-// Divide vector and number
-func (v Vector) div(k float64) Vector {
+// Div Divide vector and number
+func (v Vector) Div(k float64) Vector {
 	return Vector{v.X / k, v.Y / k}
 }
 
-func (v *Vector) setX(newX float64) {
+func (v *Vector) SetX(newX float64) {
 	v.X = newX
 }
 
-func (v *Vector) setY(newY float64) {
+func (v *Vector) SetY(newY float64) {
 	v.Y = newY
 }
