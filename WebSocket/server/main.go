@@ -10,7 +10,7 @@ import (
 )
 
 var port int
-var server structures.Server
+var key = "aboba"
 
 // читаем из .енв все значения
 func init() {
@@ -27,10 +27,17 @@ func init() {
 		}
 		port = portEnv
 	}
+
+	keyStr, isExist := os.LookupEnv("KEY")
+	if isExist {
+		key = keyStr
+	}
 }
 
 func main() {
-	server := structures.StartServer(structures.HandleMessage, port, config.WIDTH, config.HEIGHT, config.G)
+	server := structures.StartServer(structures.HandleMessage,
+		port, config.WIDTH, config.HEIGHT, config.G, key)
+	log.Println("Key: ", key)
 	log.Println("Started server on", server.Port)
 	for {
 		continue

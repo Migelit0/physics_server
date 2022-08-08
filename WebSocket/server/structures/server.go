@@ -22,6 +22,7 @@ type Server struct {
 	width, height uint16
 	g             float64
 	Port          string
+	key           string
 }
 
 func (server *Server) handle(w http.ResponseWriter, r *http.Request) {
@@ -38,15 +39,17 @@ func (server *Server) handle(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("New conn")
 	for {
-		mt, _, err := connection.ReadMessage()
+		mt, message, err := connection.ReadMessage()
 
 		if err != nil || mt == websocket.CloseMessage {
 			break // Выходим из цикла, если клиент пытается закрыть соединение или связь прервана
 		}
 
 		// go server.handleMessage(message)
-		if mt == websocket.PingMessage {
-			// нас просто пингуют - отдаем состояние мира
+		log.Println("Received: ", string(message))
+		log.Println("Need: ", server.key)
+		if mt == websocket.TextMessage && string(message) == server.key {
+			// с нас просят состояние мира
 
 			// FIXME: адекватно сделать без лишней переменной
 			world := server.worlds[connection]
@@ -64,25 +67,6 @@ func (server *Server) handle(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-
-func StartServer(handleMessage func(message []byte), port int, width, height uint16, g float64) *Server {
-	portStr := fmt.Sprintf(":%d", port)
-
-	server := Server{
-		make(map[*websocket.Conn]bool),
-		make(map[*websocket.Conn]core.World),
-		handleMessage,
-		width, height, g, portStr,
-	}
-
-	http.HandleFunc("/v1", server.handle)
-	http.HandleFunc("/test", server.echo)
-
-	go http.ListenAndServe(portStr, nil) // Уводим http сервер в горутину
-
-	return &server
-}
-
 func (server *Server) echo(w http.ResponseWriter, r *http.Request) {
 	log.Println("In echo")
 	connection, err := upgrader.Upgrade(w, r, nil)
@@ -109,4 +93,23 @@ func (server *Server) echo(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
+}
+
+func StartServer(handleMessage func(message []byte), port int, width, height uint16,
+	g float64, key string) *Server {
+	portStr := fmt.Sprintf(":%d", port)
+
+	server := Server{
+		make(map[*websocket.Conn]bool),
+		make(map[*websocket.Conn]core.World),
+		handleMessage,
+		width, height, g, portStr, key,
+	}
+
+	http.HandleFunc("/v1", server.handle)
+	http.HandleFunc("/test", server.echo)
+
+	go http.ListenAndServe(portStr, nil) // Уводим http сервер в горутину
+
+	return &server
 }
