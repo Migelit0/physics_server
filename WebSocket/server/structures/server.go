@@ -45,7 +45,7 @@ func (server *Server) handle(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// go server.handleMessage(message)
-		if mt == websocket.TextMessage && true {
+		if mt == websocket.PingMessage {
 			// нас просто пингуют - отдаем состояние мира
 
 			// FIXME: адекватно сделать без лишней переменной

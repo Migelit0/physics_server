@@ -13,6 +13,7 @@ func GenerateInitWorld(amount int) core.World {
 	g := config.G
 	width := config.WIDTH
 	height := config.HEIGHT
+	factor := config.FACTOR
 
 	var newWorld core.World = core.World{
 		Width:  config.WIDTH,
@@ -34,7 +35,7 @@ func GenerateInitWorld(amount int) core.World {
 			Mass:    1e6,
 			SpeedUp: core.Vector{},
 			Speed:   core.Vector{},
-			Factor:  nil,
+			Factor:  &factor,
 			MaxX:    &width,
 			MaxY:    &height,
 		}

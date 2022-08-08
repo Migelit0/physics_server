@@ -12,6 +12,7 @@ type Response struct {
 
 func generateResponse(w *core.World) Response {
 	var res Response
+	res.Data = make(map[uint16][2]int)
 	var coords [2]int
 	for _, body := range w.Bodies {
 		coords = [2]int{body.X, body.Y}
