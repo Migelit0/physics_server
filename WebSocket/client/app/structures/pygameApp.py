@@ -2,13 +2,12 @@ import typing as tp
 
 import pygame
 
-from structures.body import Body
-from structures.context import Context
+from body import Body
+from consts import Consts
 
 
 class App:
-    def __init__(self, context: Context, pygame_fps: int, consts: Consts):
-        self.context = context
+    def __init__(self, consts: Consts):
         self.consts = consts
         self.init_pygame()
 
@@ -21,4 +20,4 @@ class App:
     def draw_bodies(self, bodies: tp.List[Body]):
         self.screen.fill(self.consts.background_color)
         for body in bodies:
-            pygame.draw.circle(self.screen, self.consts.body_color, self.consts.ball_size)
+            pygame.draw.circle(self.screen, self.consts.body_color, (body.x, body.y), self.consts.ball_size)
