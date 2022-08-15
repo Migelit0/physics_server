@@ -23,25 +23,29 @@ def on_open(ws):
 
 
 class WebSocketApp(ws.WebSocketApp):
-    def __init__(self, context: Context, header=None, on_open=on_open, on_message=on_message, on_error=on_error,
+    def __init__(self, context: Context, header=None, on_open=on_open, on_error=on_error,
                  on_close=on_close, on_ping=None, on_pong=None, on_cont_message=None, keep_running=True,
-                 get_mask_key=None, cookie=None, subprotocols=None, on_data=None, socket=None):
-        url = context.url
+                 get_mask_key=None, cookie=None, subprotocols=None, on_data=None):
+        url: str = context.url
+        on_message = self.on_message
+        self.bodies: tp.Optional[tp.List[Body]] = None
+
         super().__init__(url, header, on_open, on_message, on_error, on_close, on_ping, on_pong, on_cont_message,
-                         keep_running, get_mask_key, cookie, subprotocols, on_data, socket)
+                         keep_running, get_mask_key, cookie, subprotocols, on_data)
         self.context = context
 
-    def on_message(self, ws, message) -> tp.List[Body]:
+    def on_message(self, ws, message) -> tp.NoReturn:
         log.info('get msg: ', message)
         raw = dict(message)
         bodies = []
         for i, coords in raw.items():
             body = Body(int(i), coords[0], coords[1])
+            bodies.append(body)
 
-        return bodies
+        self.bodies = bodies
 
-
-
+    def get_bodies(self) -> tp.List[Body]:
+        return self.bodies
 
 
 if __name__ == '__main__':
@@ -50,6 +54,5 @@ if __name__ == '__main__':
     ws.run_forever(dispatcher=rel)
     while 1:
         ws.send('bruh')
-        print(ws.recv())
+        # print(ws.recv())
         time.sleep(1)
-

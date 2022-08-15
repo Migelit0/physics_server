@@ -1,30 +1,19 @@
-import ssl
+from app.structures.consts import generate_consts
+from app.structures.context import generate_context
+from app.App import App
 
-import websocket as ws
-
-
-def on_message(ws, message):
-    print(ws)
-    print(message)
+import os
 
 
-def on_error(ws, error):
-    print(ws)
-    print(error)
-
-
-def on_close(ws):
-    print(ws)
-
-
-# if __name__ == '__main__':
 def main():
-    sslopt = {"cert_reqs": ssl.CERT_NONE, "check_hostname": False}
-    conn = ws.create_connection('wss://127.0.0.1:993/test/', sslopt=sslopt)
+    context_path = os.path.abspath('secrets/context.json')
+    consts_path = os.path.abspath('secrets/consts.json')
 
-    print('testing conn')
-    conn.send('test')
-    print(conn.recv())
+    context = generate_context(context_path)
+    consts = generate_consts(consts_path)
+
+    app = App(context, consts)
+    app.run()
 
 
 if __name__ == '__main__':

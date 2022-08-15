@@ -6,7 +6,7 @@ from body import Body
 from consts import Consts
 
 
-class App:
+class PygameApp:
     def __init__(self, consts: Consts):
         self.consts = consts
         self.init_pygame()
@@ -21,3 +21,6 @@ class App:
         self.screen.fill(self.consts.background_color)
         for body in bodies:
             pygame.draw.circle(self.screen, self.consts.body_color, (body.x, body.y), self.consts.ball_size)
+
+        self.clock.tick(self.consts.frequency)
+        pygame.display.flip()
