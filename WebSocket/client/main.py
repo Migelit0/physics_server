@@ -1,8 +1,12 @@
+import sys
+import os
+
+sys.path.append('app')
+sys.path.append('app/structures')
+
 from app.structures.consts import generate_consts
 from app.structures.context import generate_context
 from app.App import App
-
-import os
 
 
 def main():

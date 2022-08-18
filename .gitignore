@@ -1,3 +1,4 @@
 /WebSocket/client/secrets/
 .idea
 /WebSocket/server/server
+__pycache__/

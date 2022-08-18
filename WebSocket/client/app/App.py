@@ -1,5 +1,3 @@
-import time
-
 from structures.consts import Consts
 from structures.context import Context
 from structures.pygameApp import PygameApp
