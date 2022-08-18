@@ -4,10 +4,11 @@ import json
 
 
 class Context:
-    def __init__(self, server_ip: str, server_port: str, endpoint: str):
+    def __init__(self, server_ip: str, server_port: str, endpoint: str, key: str):
         self.server_ip = server_ip
         self.server_port = server_port
         self.url = f'ws://{server_ip}:{server_port}{endpoint}'
+        self.key = key
 
 
 def generate_context(path: str) -> Context:
@@ -17,5 +18,6 @@ def generate_context(path: str) -> Context:
     json_data = json.loads(data)
     cont = Context(json_data['server_ip'],
                    json_data['server_port'],
-                   json_data['endpoint'])
+                   json_data['endpoint'],
+                   json_data['key'])
     return cont

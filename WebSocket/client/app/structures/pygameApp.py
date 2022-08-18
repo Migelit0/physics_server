@@ -1,3 +1,4 @@
+import logging as log
 import typing as tp
 
 import pygame
@@ -21,6 +22,12 @@ class PygameApp:
         self.screen.fill(self.consts.background_color)
         for body in bodies:
             pygame.draw.circle(self.screen, self.consts.body_color, (body.x, body.y), self.consts.ball_size)
-
         self.clock.tick(self.consts.frequency)
         pygame.display.flip()
+
+    def check_events(self) -> dict:
+        out = {}
+        for event in pygame.event.get():
+            out['quit'] = (event == pygame.QUIT)
+
+        return out
