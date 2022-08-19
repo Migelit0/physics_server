@@ -1,4 +1,5 @@
 import logging as log
+import time
 
 from structures.consts import Consts
 from structures.context import Context
@@ -8,7 +9,16 @@ from structures.websocketApp import WebSocketApp
 
 class App:
     def __init__(self, context: Context, consts: Consts):
-        self.ws = WebSocketApp(context)
+
+        connecting = True
+        while connecting:
+            try:
+                self.ws = WebSocketApp(context)
+                connecting = False
+            except ConnectionRefusedError or ConnectionAbortedError:
+                log.warning('cannot connect')
+                time.sleep(1)
+
         self.pygameApp = PygameApp(consts)
         self.context = context
         self.consts = consts
@@ -37,7 +47,10 @@ class App:
     def run(self):
         while True:
             self.one_iter()
+            time.sleep(1 / self.consts.frequency)
 
     def close(self):
         self.ws.close()
+        self.pygameApp.close()
+        quit()
         log.info('quiting')

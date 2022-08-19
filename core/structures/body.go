@@ -47,7 +47,7 @@ func (b *Body) correctCoords() {
 			b.X = 1
 		}
 		if b.X >= int(*b.MaxX) {
-			b.Y = int(*b.MaxX) - 1
+			b.X = int(*b.MaxX) - 1
 		}
 	}
 

@@ -32,12 +32,13 @@ class WebSocketApp():  # ws.WebSocketApp):
     def __init__(self, context: Context):
         self.bodies: tp.Optional[tp.List[Body]] = None
         self.ws = ws.create_connection(context.url)
-
         self.context = context
 
     def recv_msg(self) -> tp.NoReturn:
+        log.info('receiving msg')
+        time.sleep(0.001)
         msg = self.ws.recv()
-        log.info('get msg: ', msg)
+        log.info(f'get msg: {msg}')
 
         if not msg:
             return {}
@@ -50,7 +51,6 @@ class WebSocketApp():  # ws.WebSocketApp):
             print(msg)
             return
 
-
         # FIXME: защита от инвалидной даты
         bodies = []
         for i, coords in raw.items():
@@ -60,11 +60,15 @@ class WebSocketApp():  # ws.WebSocketApp):
         self.bodies = bodies
 
     def send_key(self):
-        log.info('sending: ', self.context.key)
+        log.info(f'sending: {self.context.key}')
         self.ws.send(self.context.key)
 
     def get_bodies(self) -> tp.List[Body]:
         return self.bodies
+
+    def close(self):
+        self.ws.send()
+        self.ws.close()
 
 
 if __name__ == '__main__':
@@ -74,6 +78,7 @@ if __name__ == '__main__':
     ws_1 = websocket.WebSocketApp('ws://127.0.0.1:30000/v1', None, on_open, on_message, on_error, on_close)
     ws_1.run_forever(dispatcher=rel)
     rel.signal(2, rel.abort)
+
     # rel.dispatch()
 
     ###

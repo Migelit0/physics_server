@@ -31,3 +31,6 @@ class PygameApp:
             out['quit'] = (event == pygame.QUIT)
 
         return out
+
+    def close(self):
+        pygame.quit()

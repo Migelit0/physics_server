@@ -1,5 +1,8 @@
 import sys
 import os
+import logging as log
+
+log.basicConfig(level=log.INFO)
 
 sys.path.append('app')
 sys.path.append('app/structures')

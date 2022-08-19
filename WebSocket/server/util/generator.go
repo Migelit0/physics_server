@@ -32,7 +32,7 @@ func GenerateInitWorld(amount int) core.World {
 			Id:      uint16(i),
 			X:       x,
 			Y:       y,
-			Mass:    1e14,
+			Mass:    -1e9,
 			SpeedUp: core.Vector{},
 			Speed:   core.Vector{},
 			Factor:  &factor,
